@@ -5,7 +5,7 @@ const port = process.env.PORT || 3000;
 
 // Configura la conexión a PostgreSQL con tu URL
 const pool = new Pool({
-  connectionString: 'postgresql://ramoncito_user:tEXfECCHKvspT2QRnZupUujUuyKJbwjb@dpg-ct09pkt6l47c7387qqi0-a/ramoncito', // Usa tu URL aquí
+  connectionString: 'postgresql://ramoncito_user:tEXfECCHKvspT2QRnZupUujUuyKJbwjb@dpg-ct09pkt6l47c7387qqi0-a.oregon-postgres.render.com/ramoncito', // Usa tu URL aquí
 });
 
 // Middleware para poder recibir datos en formato JSON
