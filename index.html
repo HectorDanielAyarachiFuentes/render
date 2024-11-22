@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de Datos PostgreSQL</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        input, button { margin: 5px 0; padding: 5px; width: 100%; }
+    </style>
+</head>
+<body>
+    <h1>Registro de Datos</h1>
+    <form id="dataForm">
+        <input type="text" id="nombre" placeholder="Nombre" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="text" id="telefono" placeholder="Teléfono" required>
+        <button type="submit">Guardar Datos</button>
+    </form>
+
+    <h2>Datos Registrados</h2>
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+
+    <script>
+        const connectionString = 'postgresql://ramoncito_user:tEXfECCHKvspT2QRnZupUujUuyKJbwjb@dpg-ct09pkt6l47c7387qqi0-a.oregon-postgres.render.com/ramoncito';
+        
+        document.getElementById('dataForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const nombre = document.getElementById('nombre').value;
+            const email = document.getElementById('email').value;
+            const telefono = document.getElementById('telefono').value;
+
+            // Store data in local storage
+            let data = JSON.parse(localStorage.getItem('registros') || '[]');
+            data.push({ nombre, email, telefono });
+            localStorage.setItem('registros', JSON.stringify(data));
+
+            // Update table
+            updateTable();
+
+            // Reset form
+            this.reset();
+        });
+
+        function updateTable() {
+            const tableBody = document.getElementById('tableBody');
+            const data = JSON.parse(localStorage.getItem('registros') || '[]');
+            
+            tableBody.innerHTML = '';
+            data.forEach(item => {
+                const row = `
+                    <tr>
+                        <td>${item.nombre}</td>
+                        <td>${item.email}</td>
+                        <td>${item.telefono}</td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        // Initial table load
+        updateTable();
+    </script>
+</body>
+</html>
