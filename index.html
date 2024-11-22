@@ -32,14 +32,14 @@
     </table>
 
     <script>
-        const apiUrl = 'https://tu-api-en-render.com'; // Cambia esta URL con la URL de tu API en Render
+        const apiUrl = 'postgresql://ramoncito_user:tEXfECCHKvspT2QRnZupUujUuyKJbwjb@dpg-ct09pkt6l47c7387qqi0-a/ramoncito'; // Cambia esta URL con la URL de tu API desplegada en Render
         
         document.getElementById('dataForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const nombre = document.getElementById('nombre').value;
             const email = document.getElementById('email').value;
             const telefono = document.getElementById('telefono').value;
-
+    
             // Enviar los datos al backend para guardarlos en PostgreSQL
             fetch(`${apiUrl}/guardar`, {
                 method: 'POST',
@@ -59,7 +59,7 @@
                 console.error(err);
             });
         });
-
+    
         function updateTable() {
             // Obtener los datos de la base de datos desde la API
             fetch(`${apiUrl}/datos`)
@@ -82,9 +82,10 @@
                     console.error('Error al obtener los datos', err);
                 });
         }
-
+    
         // Cargar los datos al inicio
         updateTable();
     </script>
+    
 </body>
 </html>
