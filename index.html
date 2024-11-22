@@ -32,7 +32,7 @@
     </table>
 
     <script>
-        const connectionString = 'postgresql://ramoncito_user:tEXfECCHKvspT2QRnZupUujUuyKJbwjb@dpg-ct09pkt6l47c7387qqi0-a.oregon-postgres.render.com/ramoncito';
+        const apiUrl = 'https://tu-api-en-render.com'; // Cambia esta URL con la URL de tu API en Render
         
         document.getElementById('dataForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -40,36 +40,50 @@
             const email = document.getElementById('email').value;
             const telefono = document.getElementById('telefono').value;
 
-            // Store data in local storage
-            let data = JSON.parse(localStorage.getItem('registros') || '[]');
-            data.push({ nombre, email, telefono });
-            localStorage.setItem('registros', JSON.stringify(data));
-
-            // Update table
-            updateTable();
-
-            // Reset form
-            this.reset();
+            // Enviar los datos al backend para guardarlos en PostgreSQL
+            fetch(`${apiUrl}/guardar`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ nombre, email, telefono }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.mensaje);
+                updateTable(); // Actualiza la tabla con los nuevos datos
+                this.reset(); // Resetea el formulario
+            })
+            .catch(err => {
+                alert('Error al guardar los datos');
+                console.error(err);
+            });
         });
 
         function updateTable() {
-            const tableBody = document.getElementById('tableBody');
-            const data = JSON.parse(localStorage.getItem('registros') || '[]');
-            
-            tableBody.innerHTML = '';
-            data.forEach(item => {
-                const row = `
-                    <tr>
-                        <td>${item.nombre}</td>
-                        <td>${item.email}</td>
-                        <td>${item.telefono}</td>
-                    </tr>
-                `;
-                tableBody.innerHTML += row;
-            });
+            // Obtener los datos de la base de datos desde la API
+            fetch(`${apiUrl}/datos`)
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('tableBody');
+                    tableBody.innerHTML = '';
+                    data.forEach(item => {
+                        const row = `
+                            <tr>
+                                <td>${item.nombre}</td>
+                                <td>${item.email}</td>
+                                <td>${item.telefono}</td>
+                            </tr>
+                        `;
+                        tableBody.innerHTML += row;
+                    });
+                })
+                .catch(err => {
+                    console.error('Error al obtener los datos', err);
+                });
         }
 
-        // Initial table load
+        // Cargar los datos al inicio
         updateTable();
     </script>
 </body>
